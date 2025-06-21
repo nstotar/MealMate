@@ -157,7 +157,7 @@ def update_restaurant(request, restaurant_id):
     userName = request.session.get('username')
     if not userName:
         messages.error(request, "Please log in to perform this action.")
-        return redirect('login') # Redirect to your login URL
+        return redirect('open_login') # Redirect to your login URL
 
     try:
         current_user = Customer.objects.get(username=userName)
@@ -167,7 +167,7 @@ def update_restaurant(request, restaurant_id):
             
     except Customer.DoesNotExist:
         messages.error(request, "Invalid user session. Please log in again.")
-        return redirect('login')
+        return redirect('open_login')
 
     restaurant = get_object_or_404(Restaurant, id=restaurant_id)
     
@@ -266,7 +266,7 @@ def delete_restaurant(request, restaurant_id):
     # 1. First, check if any user is logged in
     if not userName:
         messages.error(request, "Please log in to perform this action.")
-        return redirect('login') # Redirect to your login URL
+        return redirect('open_login') # Redirect to your login URL
 
     # 2. Verify if the logged-in user is an admin
     try:
@@ -277,7 +277,7 @@ def delete_restaurant(request, restaurant_id):
             
     except Customer.DoesNotExist:
         messages.error(request, "Invalid user session. Please log in again.")
-        return redirect('login')
+        return redirect('open_login')
 
     # If the code reaches here, the user is an authenticated admin.
 
@@ -781,7 +781,7 @@ def admin_orders(request):
     # 1. First, check if any user is logged in
     if not userName:
         messages.error(request, "Please log in to access this page.")
-        return redirect('login') # Redirect to your login URL
+        return redirect('open_login') # Redirect to your login URL
 
     # 2. Verify if the logged-in user is an admin
     try:
@@ -792,7 +792,7 @@ def admin_orders(request):
             
     except Customer.DoesNotExist:
         messages.error(request, "Invalid user session. Please log in again.")
-        return redirect('login')
+        return redirect('open_login')
 
     # If the code reaches here, the user is an authenticated admin.
     
@@ -815,7 +815,7 @@ def admin_view_order(request, order_id):
     # 1. First, check if any user is logged in
     if not userName:
         messages.error(request, "Please log in to access this page.")
-        return redirect('login') # Redirect to your login URL
+        return redirect('openlogin') # Redirect to your login URL
 
     # 2. Verify if the logged-in user is an admin
     try:
@@ -826,7 +826,7 @@ def admin_view_order(request, order_id):
             
     except Customer.DoesNotExist:
         messages.error(request, "Invalid user session. Please log in again.")
-        return redirect('login')
+        return redirect('oppen_login')
 
     # If the code reaches here, the user is an authenticated admin.
     
@@ -850,7 +850,7 @@ def admin_customers(request):
     # 1. First, check if any user is logged in
     if not userName:
         messages.error(request, "Please log in to access this page.")
-        return redirect('login')
+        return redirect('open_login')
 
     # 2. Verify if the logged-in user is an admin
     try:
@@ -861,7 +861,7 @@ def admin_customers(request):
             
     except Customer.DoesNotExist:
         messages.error(request, "Invalid user session. Please log in again.")
-        return redirect('login')
+        return redirect('open_login')
 
     # If the code reaches here, the user is an authenticated admin.
     
@@ -883,7 +883,7 @@ def admin_view_customer(request, customer_id):
     # Ensure a user is logged in
     if not userName:
         messages.error(request, "Please log in to access this page.")
-        return redirect('login')
+        return redirect('open_login')
 
     # Verify the logged-in user has admin privileges
     try:
@@ -894,7 +894,7 @@ def admin_view_customer(request, customer_id):
             
     except Customer.DoesNotExist:
         messages.error(request, "Invalid user session. Please log in again.")
-        return redirect('login')
+        return redirect('open_login')
 
     # Retrieve the specific customer and their orders
     customer = get_object_or_404(Customer, id=customer_id)
@@ -915,7 +915,7 @@ def admin_settings(request):
 
     if not userName:
         messages.error(request, "Please log in to access this page.")
-        return redirect('login') 
+        return redirect('open_login') 
     # 2. Verify if the logged-in user is an admin
     try:
         current_user = Customer.objects.get(username=userName)
@@ -925,7 +925,7 @@ def admin_settings(request):
             
     except Customer.DoesNotExist:
         messages.error(request, "Invalid user session. Please log in again.")
-        return redirect('login')
+        return redirect('open_login')
     
     if request.method == 'POST':
  
@@ -950,7 +950,7 @@ def admin_restaurants(request):
     # Basic check: Is there a user logged in?
     if not userName:
         messages.error(request, "Please log in to access this page.")
-        return redirect('login') # Redirect to your login URL
+        return redirect('open_login') # Redirect to your login URL
 
     # Verify if the logged-in user is an admin
     try:
@@ -962,7 +962,7 @@ def admin_restaurants(request):
     except Customer.DoesNotExist:
         # This handles cases where the username in the session doesn't exist in the DB
         messages.error(request, "Invalid user session. Please log in again.")
-        return redirect('login')
+        return redirect('open_login')
 
     # If the code reaches here, the user is an authenticated admin.
     
@@ -983,7 +983,7 @@ def admin_home(request):
 
     if not userName:
         messages.error(request, "Please log in to access this page.")
-        return redirect('login')
+        return redirect('open_login')
 
     try:
         customer = Customer.objects.get(username=userName)
@@ -994,7 +994,7 @@ def admin_home(request):
             
     except Customer.DoesNotExist:
         messages.error(request, "Invalid user session. Please log in again.")
-        return redirect('login')
+        return redirect('open_login')
 
     restaurant_count = Restaurant.objects.count()
     customer_count = Customer.objects.count()
