@@ -17,9 +17,6 @@ DEBUG = os.environ.get('DEBUG', 'False') == 'True'
 # Allow multiple comma-separated hosts: localhost,127.0.0.1,Meal_Buddy.onrender.com
 ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', '127.0.0.1,localhost').split(',')
 
-# Default local development hosts
-ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
-
 # Add Render external host if available
 render_url = os.environ.get('RENDER_EXTERNAL_URL')
 if render_url:
