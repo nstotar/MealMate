@@ -15,7 +15,7 @@ SECRET_KEY = os.environ.get('SECRET_KEY', 'your-fallback-secret-key')
 DEBUG = os.environ.get('DEBUG', 'False') == 'True'
 
 # Allow multiple comma-separated hosts: localhost,127.0.0.1,Meal_Buddy.onrender.com
-ALLOWED_HOSTS = os.environ.get('https://meal-buddy-5dsz.onrender.com', '127.0.0.1,localhost').split(',')
+ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', '127.0.0.1,localhost').split(',')
 
 # Default local development hosts
 ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
@@ -49,6 +49,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    
 ]
 
 # --- URLs & Templates ---
