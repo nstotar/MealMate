@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Confirm Delete - Meal Buddy</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        body {
+            background-color: #f8f9fc;
+            font-family: 'Nunito', -apple-system, BlinkMacSystemFont, sans-serif;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 600px;
+            margin: 40px auto;
+            padding: 30px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.05);
+            text-align: center;
+        }
+        
+        .warning-icon {
+            font-size: 4rem;
+            color: #e74a3b;
+            margin-bottom: 20px;
+        }
+        
+        h1 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+        
+        .restaurant-name {
+            font-weight: bold;
+            color: #e74a3b;
+        }
+        
+        .button-group {
+            margin-top: 30px;
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+        }
+        
+        .btn-danger {
+            background-color: #e74a3b;
+            border-color: #e74a3b;
+        }
+        
+        .btn-secondary {
+            background-color: #858796;
+            border-color: #858796;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <i class="fas fa-exclamation-triangle warning-icon"></i>
+        <h1>Confirm Deletion</h1>
+        <p class="lead">Are you sure you want to delete the restaurant <span class="restaurant-name">{{ restaurant.name }}</span>?</p>
+        <p>This action cannot be undone. All associated menu items and reviews will also be deleted.</p>
+        
+        <div class="button-group">
+            <a href="{% url 'admin_restaurants' %}" class="btn btn-secondary">Cancel</a>
+            <form method="POST" style="display: inline;">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-danger">Delete Restaurant</button>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

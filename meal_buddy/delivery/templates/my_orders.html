@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Orders - Meal Buddy</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f8f9fa;
+        }
+        
+        .orders-container {
+            max-width: 900px;
+            margin: 40px auto;
+        }
+        
+        .orders-header {
+            margin-bottom: 30px;
+        }
+        
+        .orders-header h1 {
+            color: #333;
+            font-weight: 700;
+        }
+        
+        .order-card {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0,0,0,0.05);
+            margin-bottom: 20px;
+            overflow: hidden;
+        }
+        
+        .order-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+            background-color: #f8f9fa;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .order-id {
+            font-weight: 600;
+            color: #333;
+        }
+        
+        .order-date {
+            color: #666;
+            font-size: 0.9rem;
+        }
+        
+        .order-body {
+            padding: 20px;
+        }
+        
+        .restaurant-info {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .restaurant-logo {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-right: 15px;
+        }
+        
+        .restaurant-name {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 5px;
+        }
+        
+        .order-items {
+            margin: 15px 0;
+            padding: 15px;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+        }
+        
+        .item-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+        }
+        
+        .item-name {
+            display: flex;
+            align-items: center;
+        }
+        
+        .item-quantity {
+            background-color: #ff7e5f;
+            color: white;
+            border-radius: 50%;
+            width: 25px;
+            height: 25px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 0.8rem;
+            margin-right: 10px;
+        }
+        
+        .order-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+            border-top: 1px solid #eee;
+        }
+        
+        .order-total {
+            font-weight: 700;
+            color: #333;
+        }
+        
+        .status-badge {
+            display: inline-block;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            text-transform: capitalize;
+        }
+        
+        .status-pending {
+            background-color: #ffc107;
+            color: #212529;
+        }
+        
+        .status-confirmed {
+            background-color: #17a2b8;
+            color: white;
+        }
+        
+        .status-preparing {
+            background-color: #6f42c1;
+            color: white;
+        }
+        
+        .status-out_for_delivery {
+            background-color: #fd7e14;
+            color: white;
+        }
+        
+        .status-delivered {
+            background-color: #28a745;
+            color: white;
+        }
+        
+        .status-cancelled {
+            background-color: #dc3545;
+            color: white;
+        }
+        
+        .btn-view-details {
+            background-color: #ff7e5f;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            transition: background-color 0.3s;
+        }
+        
+        .btn-view-details:hover {
+            background-color: #e66f52;
+            color: white;
+            text-decoration: none;
+        }
+        
+        .empty-orders {
+            text-align: center;
+            padding: 50px 0;
+        }
+        
+        .empty-orders i {
+            font-size: 4rem;
+            color: #ddd;
+            margin-bottom: 20px;
+        }
+        
+        .empty-orders h3 {
+            margin-bottom: 15px;
+            color: #555;
+        }
+        
+        .empty-orders p {
+            color: #888;
+            margin-bottom: 30px;
+        }
+        
+        .btn-browse {
+            background-color: #ff7e5f;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 50px;
+            font-weight: 600;
+            transition: background-color 0.3s;
+        }
+        
+        .btn-browse:hover {
+            background-color: #e66f52;
+            color: white;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+     <!-- Navbar -->
+  {% include 'includes/navbar.html' %}
+
+    <div class="container orders-container">
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }} alert-dismissible fade show mt-3" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            {% endfor %}
+        {% endif %}
+        
+        <div class="orders-header">
+            <h1>My Orders</h1>
+        </div>
+        
+        {% if orders %}
+            {% for order in orders %}
+                <div class="order-card">
+                    <div class="order-header">
+                        <span class="order-id">Order #{{ order.id }}</span>
+                        <span class="order-date">{{ order.created_at|date:"F j, Y, g:i a" }}</span>
+                    </div>
+                    <div class="order-body">
+                        <div class="restaurant-info">
+                            <img src="{{ order.restaurant.image_url }}" alt="{{ order.restaurant.name }}" class="restaurant-logo">
+                            <div>
+                                <div class="restaurant-name">{{ order.restaurant.name }}</div>
+                                <div class="restaurant-cuisine">{{ order.restaurant.cuisine }}</div>
+                            </div>
+                            <div class="ms-auto">
+                                <span class="status-badge status-{{ order.status }}">
+                                    {{ order.get_status_display }}
+                                </span>
+                            </div>
+                        </div>
+                        
+                        <div class="order-items">
+                            {% for item in order.items.all|slice:":3" %}
+                                <div class="item-row">
+                                    <div class="item-name">
+                                        <span class="item-quantity">{{ item.quantity }}</span>
+                                        {{ item.menu_item.name }}
+                                    </div>
+                                    <div class="item-price">₹{{ item.price }} each</div>
+                                </div>
+                            {% endfor %}
+                            
+                            {% if order.items.all.count > 3 %}
+                                <div class="text-center mt-2">
+                                    <small class="text-muted">+ {{ order.items.all.count|add:"-3" }} more items</small>
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        {% else %}
+            <div class="empty-orders">
+                <i class="fas fa-shopping-bag"></i>
+                <h3>No Orders Yet</h3>
+                <p>You haven't placed any orders yet. Start exploring restaurants and place your first order!</p>
+                <a href="{% url 'show_restaurants' %}" class="btn-browse">
+                    Browse Restaurants
+                </a>
+            </div>
+        {% endif %}
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    {% include 'includes/footer.html' %}
+</body>
+</html>
+
+
+
+
+
+

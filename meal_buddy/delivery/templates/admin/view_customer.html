@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customer Details | Meal Buddy Admin</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f8f9fa;
+        }
+        
+        .dashboard {
+            display: flex;
+            min-height: 100vh;
+        }
+        
+        /* Sidebar */
+        .sidebar {
+            width: 250px;
+            background-color: #2c3e50;
+            color: white;
+            padding: 20px 0;
+            position: fixed;
+            height: 100%;
+        }
+        
+        .logo {
+            padding: 15px 25px;
+            font-size: 22px;
+            font-weight: 600;
+            margin-bottom: 30px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .menu-item {
+            display: flex;
+            align-items: center;
+            padding: 15px 25px;
+            color: #ecf0f1;
+            text-decoration: none;
+            transition: all 0.3s;
+            gap: 10px;
+        }
+        
+        .menu-item:hover, .menu-item.active {
+            background-color: #34495e;
+            color: #3498db;
+        }
+        
+        .menu-item i {
+            width: 20px;
+        }
+        
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            margin-left: 250px;
+            padding: 30px;
+        }
+        
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+        
+        .page-title {
+            font-size: 24px;
+            color: #2c3e50;
+        }
+        
+        .back-btn {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background-color: #f0f2f5;
+            color: #2c3e50;
+            padding: 8px 15px;
+            border-radius: 5px;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+        
+        .back-btn:hover {
+            background-color: #e0e2e5;
+        }
+        
+        /* Customer Details */
+        .customer-details {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            overflow: hidden;
+            margin-bottom: 30px;
+        }
+        
+        .customer-header {
+            padding: 20px;
+            border-bottom: 1px solid #f0f2f5;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .customer-name {
+            font-size: 20px;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+        
+        .customer-info {
+            padding: 20px;
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+        
+        .info-item {
+            margin-bottom: 15px;
+        }
+        
+        .info-label {
+            font-size: 14px;
+            color: #7f8c8d;
+            margin-bottom: 5px;
+        }
+        
+        .info-value {
+            font-size: 16px;
+            color: #2c3e50;
+        }
+        
+        /* Orders Section */
+        .customer-orders {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            overflow: hidden;
+        }
+        
+        .section-header {
+            padding: 20px;
+            border-bottom: 1px solid #f0f2f5;
+        }
+        
+        .section-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+        
+        .orders-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        .orders-table th, 
+        .orders-table td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid #f0f2f5;
+        }
+        
+        .orders-table th {
+            background: #f8f9fa;
+            color: #2c3e50;
+            font-weight: 500;
+        }
+        
+        .orders-table tr:last-child td {
+            border-bottom: none;
+        }
+        
+        .status-badge {
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+        
+        .status-pending {
+            background-color: #ffefd5;
+            color: #ff9f43;
+        }
+        
+        .status-confirmed {
+            background-color: #e3f2fd;
+            color: #2196f3;
+        }
+        
+        .status-preparing {
+            background-color: #e8f5e9;
+            color: #4caf50;
+        }
+        
+        .status-out_for_delivery {
+            background-color: #fff8e1;
+            color: #ffc107;
+        }
+        
+        .status-delivered {
+            background-color: #e8f5e9;
+            color: #4caf50;
+        }
+        
+        .status-cancelled {
+            background-color: #ffebee;
+            color: #f44336;
+        }
+        
+        .action-btn {
+            padding: 6px 12px;
+            border-radius: 4px;
+            text-decoration: none;
+            font-size: 12px;
+            transition: background 0.3s;
+            margin-right: 5px;
+        }
+        
+        .view-btn {
+            background: #3498db;
+            color: white;
+        }
+        
+        .view-btn:hover {
+            background: #2980b9;
+        }
+        
+        .no-orders {
+            text-align: center;
+            padding: 40px;
+            color: #7f8c8d;
+        }
+        
+        .no-orders i {
+            font-size: 48px;
+            margin-bottom: 15px;
+            color: #ddd;
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="logo">
+                <i class="fas fa-utensils"></i>
+                Meal Buddy
+            </div>
+            <a href="{% url 'admin_home' %}" class="menu-item">
+                <i class="fas fa-home"></i>
+                Dashboard
+            </a>
+            <a href="{% url 'admin_restaurants' %}" class="menu-item">
+                <i class="fas fa-store"></i>
+                Restaurants
+            </a>
+            <a href="{% url 'admin_customers' %}" class="menu-item active">
+                <i class="fas fa-users"></i>
+                Customers
+            </a>
+            <a href="{% url 'admin_orders' %}" class="menu-item">
+                <i class="fas fa-shopping-cart"></i>
+                Orders
+            </a>
+            <a href="{% url 'admin_settings' %}" class="menu-item">
+                <i class="fas fa-cog"></i>
+                Settings
+            </a>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <div class="page-header">
+                <h1 class="page-title">Customer Details</h1>
+                <a href="{% url 'admin_customers' %}" class="back-btn">
+                    <i class="fas fa-arrow-left"></i> Back to Customers
+                </a>
+            </div>
+
+            <div class="customer-details">
+                <div class="customer-header">
+                    <div class="customer-name">{{ customer.username }}</div>
+                </div>
+                <div class="customer-info">
+                    <div class="info-item">
+                        <div class="info-label">Email</div>
+                        <div class="info-value">{{ customer.email }}</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">Phone</div>
+                        <div class="info-value">{{ customer.phone }}</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">Address</div>
+                        <div class="info-value">{{ customer.address }}</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="customer-orders">
+                <div class="section-header">
+                    <h2 class="section-title">Order History</h2>
+                </div>
+                <table class="orders-table">
+                    <thead>
+                        <tr>
+                            <th>Order ID</th>
+                            <th>Restaurant</th>
+                            <th>Amount</th>
+                            <th>Date</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% if customer_orders %}
+                            {% for order in customer_orders %}
+                                <tr>
+                                    <td>#{{ order.id }}</td>
+                                    <td>{{ order.restaurant.name }}</td>
+                                    <td>₹{{ order.total_amount }}</td>
+                                    <td>{{ order.created_at|date:"M d, Y H:i" }}</td>
+                                    <td>
+                                        <span class="status-badge status-{{ order.status }}">
+                                            {{ order.get_status_display }}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <a href="{% url 'admin_view_order' order.id %}" class="action-btn view-btn">
+                                            <i class="fas fa-eye"></i> View
+                                        </a>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        {% else %}
+                            <tr>
+                                <td colspan="6">
+                                    <div class="no-orders">
+                                        <i class="fas fa-shopping-cart"></i>
+                                        <h3>No Orders Found</h3>
+                                        <p>This customer hasn't placed any orders yet.</p>
+                                    </div>
+                                </td>
+                            </tr>
+                        {% endif %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,187 @@
+<!-- templates/payment.html -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment - Meal Buddy</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <style>
+        body {
+            background-color: #f8f9fa;
+            padding-top: 50px;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        .payment-container {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+        }
+        .logo {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .logo h2 {
+            color: #ff7e5f;
+            font-weight: bold;
+        }
+        .payment-details {
+            margin-bottom: 30px;
+            background-color: #f9f9f9;
+            padding: 20px;
+            border-radius: 8px;
+        }
+        .btn-pay {
+            background-color: #F37254;
+            color: white;
+            border: none;
+            width: 100%;
+            padding: 12px;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .btn-pay:hover {
+            background-color: #e66548;
+        }
+        .btn-secondary {
+            background-color: #6c757d;
+            transition: background-color 0.3s;
+        }
+        .btn-secondary:hover {
+            background-color: #5a6268;
+        }
+        .order-summary-title {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 15px;
+        }
+        .amount-display {
+            font-size: 24px;
+            font-weight: bold;
+            color: #ff7e5f;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="payment-container">
+            <div class="logo">
+                <h2>Meal Buddy</h2>
+                <p>Complete Your Payment</p>
+            </div>
+            
+            <div class="payment-details">
+                <h4 class="order-summary-title">Order Summary</h4>
+                <p class="amount-display">Amount: ₹{{ order_amount }}</p>
+            </div>
+            
+            <form id="payment-form">
+                <script
+                    src="https://checkout.razorpay.com/v1/checkout.js"
+                    data-key="{{ razorpay_key_id }}"
+                    data-amount="{{ order_amount }}"
+                    data-currency="{{ currency }}"
+                    data-order_id="{{ order_id }}"
+                    data-buttontext="Pay Now"
+                    data-name="Meal Buddy"
+                    data-description="Food Order Payment"
+                    data-image="https://example.com/your_logo.jpg"
+                    data-prefill.name="{{ customer_name }}"
+                    data-prefill.email="{{ customer_email }}"
+                    data-prefill.contact="{{ customer_phone }}"
+                    data-theme.color="#F37254"
+                ></script>
+                <input type="hidden" custom="Hidden Element" name="hidden">
+            </form>
+            
+            <div class="mt-4">
+                <a href="{% url 'checkout' %}" class="btn btn-secondary btn-block">Cancel and Return to Checkout</a>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Style the Razorpay button
+            const rzpButton = document.querySelector('.razorpay-payment-button');
+            if (rzpButton) {
+                rzpButton.classList.add('btn', 'btn-primary', 'btn-block', 'btn-pay');
+                rzpButton.style.padding = '12px';
+                rzpButton.style.fontSize = '18px';
+                rzpButton.style.fontWeight = '600';
+                rzpButton.style.marginBottom = '15px';
+            }
+            
+            // Add event listener for payment success
+            var options = {
+                "key": "{{ razorpay_key_id }}",
+                "amount": "{{ order_amount }}",
+                "currency": "{{ currency }}",
+                "name": "Meal Buddy",
+                "description": "Food Order Payment",
+                "order_id": "{{ order_id }}",
+                "handler": function (response) {
+                    // Create a form to submit the payment details
+                    var form = document.createElement('form');
+                    form.method = 'POST';
+                    form.action = "{{ callback_url }}";
+                    
+                    // Add CSRF token
+                    var csrfToken = document.createElement('input');
+                    csrfToken.type = 'hidden';
+                    csrfToken.name = 'csrfmiddlewaretoken';
+                    csrfToken.value = '{{ csrf_token }}';
+                    form.appendChild(csrfToken);
+                    
+                    // Add payment details
+                    var paymentId = document.createElement('input');
+                    paymentId.type = 'hidden';
+                    paymentId.name = 'razorpay_payment_id';
+                    paymentId.value = response.razorpay_payment_id;
+                    form.appendChild(paymentId);
+                    
+                    var orderId = document.createElement('input');
+                    orderId.type = 'hidden';
+                    orderId.name = 'razorpay_order_id';
+                    orderId.value = response.razorpay_order_id;
+                    form.appendChild(orderId);
+                    
+                    var signature = document.createElement('input');
+                    signature.type = 'hidden';
+                    signature.name = 'razorpay_signature';
+                    signature.value = response.razorpay_signature;
+                    form.appendChild(signature);
+                    
+                    // Submit the form
+                    document.body.appendChild(form);
+                    form.submit();
+                },
+                "prefill": {
+                    "name": "{{ customer_name }}",
+                    "email": "{{ customer_email }}",
+                    "contact": "{{ customer_phone }}"
+                },
+                "theme": {
+                    "color": "#F37254"
+                }
+            };
+            
+            var rzp = new Razorpay(options);
+            
+            if (rzpButton) {
+                rzpButton.onclick = function(e) {
+                    rzp.open();
+                    e.preventDefault();
+                };
+            }
+        });
+    </script>
+</body>
+</html>

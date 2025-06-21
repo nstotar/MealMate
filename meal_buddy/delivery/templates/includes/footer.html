@@ -1,0 +1,172 @@
+<style>
+  .site-footer {
+    background-color: #191818;
+    color: #fff;
+    padding: 60px 0 30px;
+    margin-top: 60px;
+  }
+  
+  .footer-title {
+    font-weight: 700;
+    margin-bottom: 20px;
+    color: var(--primary, #ff7e5f);
+    font-size: 1.2rem;
+  }
+  
+  .footer-description {
+    color: #ddd;
+    margin-bottom: 20px;
+    line-height: 1.6;
+  }
+  
+  .footer-links {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .footer-links li {
+    margin-bottom: 10px;
+  }
+  
+  .footer-links a {
+    color: #ddd;
+    text-decoration: none;
+    transition: color 0.3s;
+    font-size: 0.9rem;
+  }
+  
+  .footer-links a:hover {
+    color: var(--primary, #ff7e5f);
+  }
+  
+  .footer-contact {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .footer-contact li {
+    margin-bottom: 15px;
+    display: flex;
+    align-items: flex-start;
+    color: #ddd;
+    font-size: 0.9rem;
+  }
+  
+  .footer-contact li i {
+    margin-right: 10px;
+    color: var(--primary, #ff7e5f);
+    min-width: 16px;
+  }
+  
+  .social-links {
+    display: flex;
+    gap: 15px;
+    margin-top: 20px;
+  }
+  
+  .social-icon {
+    width: 40px;
+    height: 40px;
+    background-color: rgba(255,255,255,0.1);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    transition: background-color 0.3s;
+  }
+  
+  .social-icon:hover {
+    background-color: var(--primary, #ff7e5f);
+  }
+  
+  .newsletter-form .form-control {
+    background-color: rgba(255,255,255,0.1);
+    border: none;
+    color: #fff;
+    border-radius: 50px 0 0 50px;
+    padding: 10px 15px;
+  }
+  
+  .newsletter-form .form-control::placeholder {
+    color: #aaa;
+  }
+  
+  .newsletter-form .btn {
+    background-color: var(--primary, #ff7e5f);
+    border: none;
+    border-radius: 0 50px 50px 0;
+    padding: 10px 20px;
+  }
+  
+  .copyright {
+    text-align: center;
+    padding-top: 30px;
+    margin-top: 30px;
+    border-top: 1px solid rgba(255,255,255,0.1);
+    color: #aaa;
+    font-size: 0.9rem;
+  }
+</style>
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-4 mb-4 mb-md-0">
+        <h3 class="footer-title">Meal Buddy</h3>
+        <p class="footer-description">
+          Delicious food delivered to your doorstep. Order from your favorite restaurants and enjoy the best meals without leaving your home.
+        </p>
+        <div class="social-links">
+          <a href="#" class="social-icon"><i class="fab fa-facebook-f"></i></a>
+          <a href="#" class="social-icon"><i class="fab fa-twitter"></i></a>
+          <a href="#" class="social-icon"><i class="fab fa-instagram"></i></a>
+          <a href="#" class="social-icon"><i class="fab fa-linkedin-in"></i></a>
+        </div>
+      </div>
+      
+      <div class="col-md-2 col-6 mb-4 mb-md-0">
+        <h3 class="footer-title">Quick Links</h3>
+        <ul class="footer-links">
+          <li><a href="{% url 'customer_home' %}">Home</a></li>
+          <li><a href="{% url 'view_cart' %}">Cart</a></li>
+          <li><a href="{% url 'my_orders' %}">My Orders</a></li>
+          <li><a href="{% url 'show_restaurants' %}">Restaurants</a></li>
+        </ul>
+      </div>
+      
+      <div class="col-md-2 col-6 mb-4 mb-md-0">
+        <h3 class="footer-title">Categories</h3>
+        <ul class="footer-links">
+          <li><a href="{% url 'search_restaurants' %}?query=Pizza">Pizza</a></li>
+          <li><a href="{% url 'search_restaurants' %}?query=Burger">Burgers</a></li>
+          <li><a href="{% url 'search_restaurants' %}?query=Chinese">Chinese</a></li>
+          <li><a href="{% url 'search_restaurants' %}?query=Indian">Indian</a></li>
+          <li><a href="{% url 'search_restaurants' %}?query=Italian">Italian</a></li>
+        </ul>
+      </div>
+      
+      <div class="col-md-4">
+        <h3 class="footer-title">Contact Us</h3>
+        <ul class="footer-contact">
+          <li><i class="fas fa-map-marker-alt"></i> 123 Food Street, Foodville, FD 12345</li>
+          <li><i class="fas fa-phone"></i> +1 (555) 123-4567</li>
+          <li><i class="fas fa-envelope"></i> support@mealbuddy.com</li>
+        </ul>
+        <form class="newsletter-form mt-3">
+          <div class="input-group">
+            <input type="email" class="form-control" placeholder="Your email address">
+            <button class="btn btn-primary" type="submit">Subscribe</button>
+          </div>
+        </form>
+      </div>
+    </div>
+    
+    <div class="copyright">
+      <p>&copy; 2025 Meal Buddy. All rights reserved.</p>
+    </div>
+  </div>
+</footer>
+

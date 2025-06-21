@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Meal Buddy - Food Delivery</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <style>
+    :root {
+      --primary: #ff7e5f;
+      --primary-dark: #e66f52;
+      --secondary: #4CAF50;
+      --accent: #3498db;
+      --light-bg: #fff8f5;
+      --text-dark: #333333;
+      --text-light: #6c757d;
+    }
+    
+    body {
+      background-color: var(--light-bg);
+      font-family: 'Nunito', sans-serif;
+      color: var(--text-dark);
+    }
+
+
+    .btn-login {
+      background-color: transparent;
+      border: 2px solid var(--primary);
+      color: var(--primary);
+      font-weight: 600;
+      padding: 8px 20px;
+      border-radius: 50px;
+      transition: all 0.3s;
+    }
+
+    .btn-login:hover {
+      background-color: var(--primary);
+      color: white;
+    }
+
+    .btn-signup {
+      background-color: var(--primary);
+      border: 2px solid var(--primary);
+      color: white;
+      font-weight: 600;
+      padding: 8px 20px;
+      border-radius: 50px;
+      transition: all 0.3s;
+    }
+
+    .btn-signup:hover {
+      background-color: var(--primary-dark);
+      border-color: var(--primary-dark);
+    }
+
+    /* Hero Section */
+    .hero {
+      background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('https://images.unsplash.com/photo-1504674900247-0877df9cc836?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
+      background-size: cover;
+      background-position: center;
+      color: white;
+      padding: 100px 0;
+      text-align: center;
+      border-radius: 0 0 20px 20px;
+      margin-bottom: 40px;
+    }
+
+    .hero h1 {
+      font-size: 3rem;
+      font-weight: 800;
+      margin-bottom: 20px;
+    }
+
+    .hero p {
+      font-size: 1.2rem;
+      max-width: 600px;
+      margin: 0 auto 30px;
+    }
+
+    .search-container {
+      max-width: 600px;
+      margin: 0 auto;
+      position: relative;
+    }
+
+    .search-input {
+      width: 100%;
+      padding: 15px 20px;
+      border-radius: 50px;
+      border: none;
+      font-size: 1.1rem;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+      padding-left: 50px;
+    }
+
+    .search-icon {
+      position: absolute;
+      left: 20px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--primary);
+      font-size: 1.2rem;
+    }
+
+    .search-button {
+      position: absolute;
+      right: 5px;
+      top: 50%;
+      transform: translateY(-50%);
+      background-color: var(--primary);
+      color: white;
+      border: none;
+      border-radius: 50px;
+      padding: 8px 20px;
+      font-weight: 600;
+      transition: background-color 0.3s;
+    }
+
+    .search-button:hover {
+      background-color: var(--primary-dark);
+    }
+
+    /* Category Section */
+    .category-section {
+      padding: 40px 0;
+    }
+
+    .section-title {
+      font-weight: 800;
+      margin-bottom: 30px;
+      position: relative;
+      display: inline-block;
+    }
+
+    .section-title::after {
+      content: '';
+      position: absolute;
+      bottom: -10px;
+      left: 0;
+      width: 50px;
+      height: 3px;
+      background-color: var(--primary);
+    }
+
+    .category-card {
+      background-color: white;
+      border-radius: 15px;
+      overflow: hidden;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+      transition: transform 0.3s, box-shadow 0.3s;
+      margin-bottom: 20px;
+      cursor: pointer;
+      text-align: center;
+    }
+
+    .category-card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+    }
+
+    .category-img {
+      height: 150px;
+      width: 100%;
+      object-fit: cover;
+    }
+
+    .category-name {
+      padding: 15px;
+      font-weight: 700;
+      color: var(--text-dark);
+    }
+
+    /* Featured Restaurants */
+    .restaurant-card {
+      background-color: white;
+      border-radius: 15px;
+      overflow: hidden;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+      transition: transform 0.3s, box-shadow 0.3s;
+      margin-bottom: 30px;
+      height: 100%;
+    }
+
+    .restaurant-card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+    }
+
+    .restaurant-img {
+      height: 200px;
+      width: 100%;
+      object-fit: cover;
+    }
+
+    .restaurant-info {
+      padding: 20px;
+    }
+
+    .restaurant-name {
+      font-weight: 700;
+      font-size: 1.2rem;
+      margin-bottom: 5px;
+    }
+
+    .restaurant-cuisine {
+      color: var(--text-light);
+      margin-bottom: 10px;
+    }
+
+    .restaurant-rating {
+      color: #ffc107;
+      margin-bottom: 15px;
+    }
+
+    .btn-view {
+      background-color: var(--primary);
+      color: white;
+      border: none;
+      padding: 8px 20px;
+      border-radius: 50px;
+      font-weight: 600;
+      transition: background-color 0.3s;
+    }
+
+    .btn-view:hover {
+      background-color: var(--primary-dark);
+      color: white;
+    }
+
+    /* How It Works */
+    .how-it-works {
+      background-color: white;
+      padding: 60px 0;
+      margin: 40px 0;
+      border-radius: 20px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+    }
+
+    .step-card {
+      text-align: center;
+      padding: 20px;
+    }
+
+    .step-icon {
+      width: 80px;
+      height: 80px;
+      background-color: var(--light-bg);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 20px;
+      font-size: 2rem;
+      color: var(--primary);
+    }
+
+    .step-title {
+      font-weight: 700;
+      margin-bottom: 10px;
+    }
+
+    .step-description {
+      color: var(--text-light);
+    }
+
+    /* Footer */
+    footer {
+      background-color: #191818;
+      color: rgb(24, 22, 22);
+      padding: 60px 0 30px;
+      margin-top: 60px;
+    }
+
+    .footer-title {
+      font-weight: 700;
+      margin-bottom: 20px;
+      color: var(--primary);
+    }
+
+    .footer-links {
+      list-style: none;
+      padding: 0;
+    }
+
+    .footer-links li {
+      margin-bottom: 10px;
+    }
+
+    .footer-links a {
+      color: #ddd;
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+
+    .footer-links a:hover {
+      color: var(--primary);
+    }
+
+    .social-links {
+      display: flex;
+      gap: 15px;
+      margin-top: 20px;
+    }
+
+    .social-icon {
+      width: 40px;
+      height: 40px;
+      background-color: rgba(255,255,255,0.1);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      transition: background-color 0.3s;
+    }
+
+    .social-icon:hover {
+      background-color: var(--primary);
+    }
+
+    .copyright {
+      text-align: center;
+      padding-top: 30px;
+      margin-top: 30px;
+      border-top: 1px solid rgba(255,255,255,0.1);
+      color: #aaa;
+    }
+
+    /* All Restaurants Button */
+    .btn-all-restaurants {
+      background-color: var(--primary);
+      color: white;
+      border: none;
+      padding: 12px 30px;
+      border-radius: 50px;
+      font-weight: 600;
+      transition: background-color 0.3s;
+      margin-top: 20px;
+    }
+
+    .btn-all-restaurants:hover {
+      background-color: var(--primary-dark);
+    }
+
+    /* Floating cart button */
+    .floating-cart {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      background-color: var(--primary);
+      color: white;
+      border-radius: 50%;
+      width: 60px;
+      height: 60px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+      text-decoration: none;
+      transition: transform 0.3s, background-color 0.3s;
+      z-index: 1000;
+    }
+    
+    .floating-cart:hover {
+      transform: scale(1.1);
+      background-color: var(--primary-dark);
+      color: white;
+    }
+    
+    .cart-badge {
+      position: absolute;
+      top: -5px;
+      right: -5px;
+      background-color: var(--secondary);
+      color: white;
+      border-radius: 50%;
+      width: 25px;
+      height: 25px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 0.8rem;
+      font-weight: bold;
+    }
+
+    /* Responsive Adjustments */
+    @media (max-width: 768px) {
+      .hero h1 {
+        font-size: 2.2rem;
+      }
+      .hero {
+        padding: 60px 0;
+      }
+      .search-input {
+        padding: 12px 20px;
+        padding-left: 45px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Navbar -->
+  {% include 'includes/navbar.html' %}
+
+  <!-- Floating Cart Button (if items in cart) -->
+  {% if request.session.cart %}
+    {% with cart_count=request.session.cart.items|length %}
+      {% if cart_count > 0 %}
+        <a href="{% url 'view_cart' %}" class="floating-cart">
+          <i class="fas fa-shopping-cart fa-lg"></i>
+          <span class="cart-badge">{{ cart_count }}</span>
+        </a>
+      {% endif %}
+    {% endwith %}
+  {% endif %}
+
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="container">
+      <h1>Delicious Food Delivered To Your Door</h1>
+      <p>Order from your favorite restaurants and enjoy the best meals without leaving your home.</p>
+      <div class="search-container">
+        <form action="{% url 'search_restaurants' %}" method="GET">
+          <input type="text" name="query" class="search-input" placeholder="Search for restaurants or cuisines...">
+          <i class="fas fa-search search-icon"></i>
+          <button type="submit" class="search-button">Search</button>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- Categories Section -->
+  <section class="category-section">
+    <div class="container">
+      <h2 class="section-title">Explore By Cuisine</h2>
+      <div class="row">
+        <div class="col-6 col-md-3">
+          <div class="category-card" onclick="filterByCuisine('Indian')">
+            <img src="https://images.unsplash.com/photo-1585937421612-70a008356fbe?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" class="category-img" alt="Indian Cuisine">
+            <div class="category-name">Indian</div>
+          </div>
+        </div>
+        <div class="col-6 col-md-3">
+          <div class="category-card" onclick="filterByCuisine('Italian')">
+            <img src="https://images.unsplash.com/photo-1595295333158-4742f28fbd85?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" class="category-img" alt="Italian Cuisine">
+            <div class="category-name">Italian</div>
+          </div>
+        </div>
+        <div class="col-6 col-md-3">
+          <div class="category-card" onclick="filterByCuisine('Chinese')">
+            <img src="https://images.unsplash.com/photo-1563245372-f21724e3856d?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" class="category-img" alt="Chinese Cuisine">
+            <div class="category-name">Chinese</div>
+          </div>
+        </div>
+        <div class="col-6 col-md-3">
+          <div class="category-card" onclick="filterByCuisine('Mexican')">
+            <img src="https://images.unsplash.com/photo-1599974579688-8dbdd335c77f?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" class="category-img" alt="Mexican Cuisine">
+            <div class="category-name">Mexican</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Featured Restaurants -->
+  <section class="featured-section">
+    <div class="container">
+      <h2 class="section-title">Featured Restaurants</h2>
+      <div class="row">
+        {% if rows %}
+          {% for restaurant in rows|slice:":4" %}
+            <div class="col-md-6 col-lg-3 mb-4">
+              <div class="restaurant-card">
+                <img src="{{ restaurant.image_url }}" class="restaurant-img" alt="{{ restaurant.name }}">
+                <div class="restaurant-info">
+                  <h3 class="restaurant-name">{{ restaurant.name }}</h3>
+                  <p class="restaurant-cuisine">{{ restaurant.cuisine }}</p>
+                  <div class="restaurant-rating">
+                    {% for i in "12345" %}
+                      {% if forloop.counter <= restaurant.rating %}
+                        <i class="fas fa-star"></i>
+                      {% else %}
+                        <i class="far fa-star"></i>
+                      {% endif %}
+                    {% endfor %}
+                    <span class="ms-1">({{ restaurant.rating }})</span>
+                  </div>
+                  <a href="{% url 'view_menu' restaurant.id %}" class="btn btn-view">View Menu</a>
+                </div>
+              </div>
+            </div>
+          {% endfor %}
+        {% else %}
+          <div class="col-12 text-center">
+            <p>No restaurants available at the moment.</p>
+          </div>
+        {% endif %}
+      </div>
+      <div class="text-center">
+        <a href="{% url 'show_restaurants' %}" class="btn btn-all-restaurants">View All Restaurants</a>
+      </div>
+    </div>
+  </section> 
+  <!-- Footer -->
+  {% include 'includes/footer.html' %}
+</body>
+</html>

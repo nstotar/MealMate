@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Restaurant - Meal Buddy</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+        body {
+            background: linear-gradient(to right, #ffecd2, #fcb69f);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        .form-container {
+            background-color: white;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 500px;
+        }
+        h2 {
+            color: #ff7e5f;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            color: #333;
+        }
+        input, textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        textarea {
+            height: 100px;
+            resize: vertical;
+        }
+        .btn {
+            display: inline-block;
+            padding: 12px 25px;
+            background-color: #ff7e5f;
+            color: white;
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+            font-size: 16px;
+            width: 100%;
+            transition: background-color 0.3s;
+        }
+        .btn:hover {
+            background-color: #eb6a4c;
+        }
+        .messages {
+            margin-bottom: 20px;
+        }
+        .message {
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+        .success {
+            background-color: #d4edda;
+            color: #155724;
+        }
+        .error {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+        /* Star Rating Styles */
+        .rating {
+            display: flex;
+            flex-direction: row-reverse;
+            justify-content: flex-end;
+        }
+        .rating input {
+            display: none;
+        }
+        .rating label {
+            cursor: pointer;
+            width: auto;
+            font-size: 30px;
+            color: #ddd;
+            padding: 5px;
+        }
+        .rating label:before {
+            content: '\f005';
+            font-family: 'Font Awesome 5 Free';
+        }
+        .rating input:checked ~ label {
+            color: #ffd700;
+        }
+        .rating label:hover,
+        .rating label:hover ~ label {
+            color: #ffd700;
+        }
+        .rating-group {
+            margin-bottom: 20px;
+        }
+        .rating-label {
+            display: block;
+            margin-bottom: 10px;
+            color: #333;
+            font-weight: 500;
+        }
+        .url-preview {
+            margin-top: 10px;
+            max-width: 100%;
+            height: 200px;
+            border: 1px dashed #ddd;
+            border-radius: 5px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+        .url-preview img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+        }
+        .preview-text {
+            color: #666;
+            font-size: 14px;
+        }
+        .invalid-url {
+            border-color: #dc3545 !important;
+        }
+    </style>
+</head>
+<body>
+    <div class="form-container">
+        <h2>Add New Restaurant</h2>
+
+        {% if messages %}
+        <div class="messages">
+            {% for message in messages %}
+            <div class="message {% if message.tags %}{{ message.tags }}{% endif %}">
+                {{ message }}
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        <form action="{% url 'add_restaurant' %}" method="POST">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="name">Restaurant Name</label>
+                <input type="text" id="name" name="name" required>
+            </div>
+
+            <div class="form-group">
+                <label for="image_url">Restaurant Image URL</label>
+                <input type="url" id="image_url" name="image_url" 
+                       placeholder="https://example.com/image.jpg" 
+                       pattern="https?://.+" 
+                       title="Please enter a valid URL starting with http:// or https://"
+                       required
+                       onchange="previewImage(this.value)">
+                <div class="url-preview" id="imagePreview">
+                    <span class="preview-text">Image preview will appear here</span>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="phone">Phone Number</label>
+                <input type="tel" id="phone" name="phone" required>
+            </div>
+
+            <div class="form-group">
+                <label for="cuisine">Cuisine Type</label>
+                <input type="text" id="cuisine" name="cuisine" required>
+            </div>
+
+            <div class="form-group">
+                <label for="opening_hours">Opening Hours</label>
+                <input type="text" id="opening_hours" name="opening_hours" placeholder="e.g., 9:00 AM - 10:00 PM" required>
+            </div>
+
+            <div class="rating-group">
+                <span class="rating-label">Rating</span>
+                <div class="rating">
+                    <input type="radio" id="star5" name="rating" value="5" required>
+                    <label for="star5" title="5 stars"></label>
+                    <input type="radio" id="star4" name="rating" value="4">
+                    <label for="star4" title="4 stars"></label>
+                    <input type="radio" id="star3" name="rating" value="3">
+                    <label for="star3" title="3 stars"></label>
+                    <input type="radio" id="star2" name="rating" value="2">
+                    <label for="star2" title="2 stars"></label>
+                    <input type="radio" id="star1" name="rating" value="1">
+                    <label for="star1" title="1 star"></label>
+                </div>
+            </div>
+
+            <button type="submit" class="btn">Add Restaurant</button>
+        </form>
+    </div>
+
+    <script>
+        function previewImage(url) {
+            const preview = document.getElementById('imagePreview');
+            const urlInput = document.getElementById('image_url');
+
+            // Clear previous content
+            preview.innerHTML = '';
+
+            if (url) {
+                const img = new Image();
+                img.onload = function() {
+                    preview.innerHTML = '';
+                    preview.appendChild(img);
+                    urlInput.classList.remove('invalid-url');
+                };
+                img.onerror = function() {
+                    preview.innerHTML = '<span class="preview-text">Invalid image URL</span>';
+                    urlInput.classList.add('invalid-url');
+                };
+                img.src = url;
+            } else {
+                preview.innerHTML = '<span class="preview-text">Image preview will appear here</span>';
+                urlInput.classList.remove('invalid-url');
+            }
+        }
+    </script>
+</body>
+</html>

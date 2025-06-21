@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Cart Debug</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        h1, h2 { color: #333; }
+        pre { background: #f5f5f5; padding: 10px; border-radius: 5px; }
+        .section { margin-bottom: 30px; }
+        .actions { margin-top: 20px; }
+        .btn { display: inline-block; padding: 10px 15px; background: #007bff; color: white; text-decoration: none; border-radius: 5px; margin-right: 10px; }
+        .btn-danger { background: #dc3545; }
+    </style>
+</head>
+<body>
+    <h1>Cart Debug Information</h1>
+    
+    <div class="section">
+        <h2>Cart Contents</h2>
+        <pre>{{ cart|pprint }}</pre>
+    </div>
+    
+    <div class="section">
+        <h2>Session Data</h2>
+        <pre>{{ session_data|pprint }}</pre>
+    </div>
+    
+    <div class="actions">
+        <a href="{% url 'force_clear_cart' %}" class="btn btn-danger">Force Clear Cart</a>
+        <a href="{% url 'view_cart' %}" class="btn">View Cart</a>
+        <a href="{% url 'customer_home' %}" class="btn">Home</a>
+    </div>
+</body>
+</html>

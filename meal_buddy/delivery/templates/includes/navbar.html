@@ -1,0 +1,152 @@
+<nav class="navbar navbar-expand-lg sticky-top">
+  <div class="container">
+    <a class="navbar-brand" href="{% url 'customer_home' %}">
+      <span class="brand-icon">🍽️</span>
+      <span class="brand-text">Meal Buddy</span>
+    </a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav me-auto">
+        <li class="nav-item">
+          <a class="nav-link {% if request.resolver_match.url_name == 'customer_home' %}active{% endif %}" 
+             href="{% url 'customer_home' %}">
+             <i class="fas fa-home me-1"></i> Home
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link {% if request.resolver_match.url_name == 'show_restaurants' %}active{% endif %}" 
+             href="{% url 'show_restaurants' %}">
+             <i class="fas fa-utensils me-1"></i> Restaurants
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link {% if request.resolver_match.url_name == 'view_cart' %}active{% endif %}" 
+             href="{% url 'view_cart' %}">
+             <i class="fas fa-shopping-cart me-1"></i> Cart
+          </a>
+        </li>
+        {% if 'username' in request.session %}
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'my_orders' %}">
+            <i class="fas fa-list-alt"></i> My Orders
+          </a>
+        </li>
+        {% endif %}
+      </ul>
+      <div class="d-flex align-items-center">
+        {% if request.session.username %}
+          <div class="user-profile-container me-3">
+            <i class="fas fa-user-circle user-icon"></i>
+            <span class="username">{{ request.session.username }}</span>
+          </div>
+          <a href="{% url 'logout' %}" class="btn btn-logout">
+            <i class="fas fa-sign-out-alt me-1"></i> Logout
+          </a>
+        {% else %}
+          <a href="{% url 'login' %}" class="btn btn-login me-2">
+            <i class="fas fa-sign-in-alt me-1"></i> Login
+          </a>
+          <a href="{% url 'signup' %}" class="btn btn-signup">
+            <i class="fas fa-user-plus me-1"></i> Sign Up
+          </a>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</nav>
+
+<style>
+  :root {
+    --primary: #ff7e5f;
+    --primary-dark: #e66f52;
+    --secondary: #4CAF50;
+    --accent: #3498db;
+    --light-bg: #fff8f5;
+    --text-dark: #333333;
+    --text-light: #6c757d;
+  }
+
+  /* Navbar Styles */
+  .navbar {
+    background-color: white;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  }
+
+  .navbar-brand {
+    font-weight: 800;
+    color: var(--primary);
+    font-size: 1.5rem;
+  }
+
+  .nav-link {
+    font-weight: 600;
+    color: var(--text-dark);
+    margin: 0 10px;
+    transition: color 0.3s;
+  }
+
+  .nav-link:hover {
+    color: var(--primary);
+  }
+
+  .nav-link.active {
+    color: var(--primary);
+  }
+
+  .navbar-toggler {
+    border: none;
+    outline: none;
+  }
+
+  .btn-login, .btn-signup, .btn-logout {
+    border-radius: 50px;
+    padding: 8px 20px;
+    font-weight: 600;
+    transition: all 0.3s;
+  }
+
+  .btn-login {
+    background-color: transparent;
+    border: 1px solid var(--primary);
+    color: var(--primary);
+  }
+
+  .btn-login:hover {
+    background-color: var(--primary);
+    color: white;
+  }
+
+  .btn-signup, .btn-logout {
+    background-color: var(--primary);
+    border: 1px solid var(--primary);
+    color: white;
+  }
+
+  .btn-signup:hover, .btn-logout:hover {
+    background-color: var(--primary-dark);
+    color: white;
+  }
+
+  .user-profile-container {
+    display: flex;
+    align-items: center;
+  }
+
+  .user-icon {
+    font-size: 1.5rem;
+    color: var(--primary);
+    margin-right: 8px;
+  }
+
+  .username {
+    font-weight: 600;
+    color: var(--text-dark);
+  }
+</style>
+
+
+
+
+

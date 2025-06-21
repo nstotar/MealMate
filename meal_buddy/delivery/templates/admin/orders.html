@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Orders - Meal Buddy Admin</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background-color: #f0f2f5;
+            min-height: 100vh;
+        }
+
+        .dashboard {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Sidebar Styles */
+        .sidebar {
+            width: 250px;
+            background: #2c3e50;
+            color: white;
+            padding: 20px;
+            position: fixed;
+            height: 100vh;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: 600;
+            padding: 20px 0;
+            text-align: center;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            margin-bottom: 20px;
+        }
+
+        .logo i {
+            color: #3498db;
+            margin-right: 10px;
+        }
+
+        .menu-item {
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            color: white;
+        }
+
+        .menu-item:hover {
+            background: #34495e;
+        }
+
+        .menu-item i {
+            margin-right: 10px;
+            width: 20px;
+            text-align: center;
+        }
+
+        /* Main Content Styles */
+        .main-content {
+            margin-left: 250px;
+            padding: 30px;
+            width: calc(100% - 250px);
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #e1e1e1;
+        }
+
+        .page-title h1 {
+            font-size: 24px;
+            color: #2c3e50;
+        }
+
+        .page-title p {
+            color: #7f8c8d;
+            margin-top: 5px;
+        }
+
+        /* Filters */
+        .filters {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .filter-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .filter-label {
+            font-weight: 500;
+            color: #2c3e50;
+        }
+
+        .filter-select {
+            padding: 8px 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            background-color: white;
+            color: #2c3e50;
+        }
+
+        /* Orders Table */
+        .orders-table-container {
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        .orders-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .orders-table th, 
+        .orders-table td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid #f0f2f5;
+        }
+
+        .orders-table th {
+            background: #f8f9fa;
+            color: #2c3e50;
+            font-weight: 500;
+        }
+
+        .orders-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .status-badge {
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .status-pending {
+            background-color: #ffefd5;
+            color: #ff9f43;
+        }
+
+        .status-confirmed {
+            background-color: #e3f2fd;
+            color: #2196f3;
+        }
+
+        .status-preparing {
+            background-color: #e8f5e9;
+            color: #4caf50;
+        }
+
+        .status-out_for_delivery {
+            background-color: #fff8e1;
+            color: #ffc107;
+        }
+
+        .status-delivered {
+            background-color: #e8f5e9;
+            color: #4caf50;
+        }
+
+        .status-cancelled {
+            background-color: #ffebee;
+            color: #f44336;
+        }
+
+        .action-btn {
+            padding: 6px 12px;
+            border-radius: 4px;
+            text-decoration: none;
+            font-size: 12px;
+            transition: background 0.3s;
+            margin-right: 5px;
+        }
+
+        .view-btn {
+            background: #3498db;
+            color: white;
+        }
+
+        .view-btn:hover {
+            background: #2980b9;
+        }
+
+        .update-btn {
+            background: #2ecc71;
+            color: white;
+        }
+
+        .update-btn:hover {
+            background: #27ae60;
+        }
+
+        /* Pagination */
+        .pagination {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+            gap: 5px;
+        }
+
+        .pagination a {
+            padding: 8px 12px;
+            border-radius: 5px;
+            background: white;
+            color: #2c3e50;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .pagination a:hover {
+            background: #f0f2f5;
+        }
+
+        .pagination .active {
+            background: #3498db;
+            color: white;
+        }
+
+        /* Status Update Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+        }
+
+        .modal-content {
+            background-color: white;
+            margin: 10% auto;
+            padding: 20px;
+            border-radius: 10px;
+            width: 400px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .modal-title {
+            font-size: 18px;
+            color: #2c3e50;
+        }
+
+        .close-modal {
+            font-size: 24px;
+            cursor: pointer;
+            color: #7f8c8d;
+        }
+
+        .modal-body {
+            margin-bottom: 20px;
+        }
+
+        .status-select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            margin-top: 10px;
+        }
+
+        .modal-footer {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+        }
+
+        .modal-btn {
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            border: none;
+            font-weight: 500;
+        }
+
+        .cancel-btn {
+            background: #f0f2f5;
+            color: #2c3e50;
+        }
+
+        .save-btn {
+            background: #3498db;
+            color: white;
+        }
+
+        /* No Orders Message */
+        .no-orders {
+            text-align: center;
+            padding: 40px;
+            color: #7f8c8d;
+        }
+
+        .no-orders i {
+            font-size: 48px;
+            margin-bottom: 15px;
+            color: #ddd;
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="logo">
+                <i class="fas fa-utensils"></i>
+                Meal Buddy
+            </div>
+            <a href="{% url 'admin_home' %}" class="menu-item">
+                <i class="fas fa-home"></i>
+                Dashboard
+            </a>
+            <a href="{% url 'admin_restaurants' %}" class="menu-item">
+                <i class="fas fa-store"></i>
+                Restaurants
+            </a>
+            <a href="{% url 'admin_customers' %}" class="menu-item">
+                <i class="fas fa-users"></i>
+                Customers
+            </a>
+            <a href="{% url 'admin_orders' %}" class="menu-item active">
+                <i class="fas fa-shopping-cart"></i>
+                Orders
+            </a>
+            <a href="{% url 'admin_settings' %}" class="menu-item">
+                <i class="fas fa-cog"></i>
+                Settings
+            </a>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Header -->
+            <div class="header">
+                <div class="page-title">
+                    <h1>Manage Orders</h1>
+                    <p>View and manage all customer orders</p>
+                </div>
+            </div>
+
+            <!-- Filters -->
+            <form method="get" action="{% url 'admin_orders' %}">
+                <div class="filters">
+                    <div class="filter-group">
+                        <span class="filter-label">Status:</span>
+                        <select name="status" class="filter-select">
+                            <option value="">All Statuses</option>
+                            {% for status_value, status_name in status_choices %}
+                                <option value="{{ status_value }}" {% if status == status_value %}selected{% endif %}>
+                                    {{ status_name }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <span class="filter-label">Restaurant:</span>
+                        <select name="restaurant" class="filter-select">
+                            <option value="">All Restaurants</option>
+                            {% for rest in restaurants %}
+                                <option value="{{ rest.id }}" {% if restaurant_id == rest.id %}selected{% endif %}>
+                                    {{ rest.name }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <span class="filter-label">Date:</span>
+                        <select name="date_filter" class="filter-select">
+                            <option value="">All Time</option>
+                            <option value="today" {% if date_filter == 'today' %}selected{% endif %}>Today</option>
+                            <option value="yesterday" {% if date_filter == 'yesterday' %}selected{% endif %}>Yesterday</option>
+                            <option value="this_week" {% if date_filter == 'this_week' %}selected{% endif %}>This Week</option>
+                            <option value="this_month" {% if date_filter == 'this_month' %}selected{% endif %}>This Month</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="action-btn view-btn">
+                        <i class="fas fa-filter"></i> Apply Filters
+                    </button>
+                </div>
+            </form>
+
+            <!-- Orders Table -->
+            <div class="orders-table-container">
+                <table class="orders-table">
+                    <thead>
+                        <tr>
+                            <th>Order ID</th>
+                            <th>Customer</th>
+                            <th>Restaurant</th>
+                            <th>Amount</th>
+                            <th>Date</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% if orders %}
+                            {% for order in orders %}
+                                <tr>
+                                    <td>#{{ order.id }}</td>
+                                    <td>{{ order.customer.username }}</td>
+                                    <td>{{ order.restaurant.name }}</td>
+                                    <td>₹{{ order.total_amount }}</td>
+                                    <td>{{ order.created_at|date:"M d, Y H:i" }}</td>
+                                    <td>
+                                        <span class="status-badge status-{{ order.status }}">
+                                            {{ order.get_status_display }}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <a href="{% url 'admin_view_order' order.id %}" class="action-btn view-btn">
+                                            <i class="fas fa-eye"></i> View
+                                        </a>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        {% else %}
+                            <tr>
+                                <td colspan="7">
+                                    <div class="no-orders">
+                                        <i class="fas fa-shopping-cart"></i>
+                                        <h3>No Orders Found</h3>
+                                        <p>There are no orders matching your filters.</p>
+                                    </div>
+                                </td>
+                            </tr>
+                        {% endif %}
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Pagination -->
+            {% if orders.has_other_pages %}
+                <div class="pagination">
+                    {% if orders.has_previous %}
+                        <a href="?page=1{% if status %}&status={{ status }}{% endif %}{% if restaurant_id %}&restaurant={{ restaurant_id }}{% endif %}{% if date_filter %}&date_filter={{ date_filter }}{% endif %}">
+                            <i class="fas fa-angle-double-left"></i>
+                        </a>
+                        <a href="?page={{ orders.previous_page_number }}{% if status %}&status={{ status }}{% endif %}{% if restaurant_id %}&restaurant={{ restaurant_id }}{% endif %}{% if date_filter %}&date_filter={{ date_filter }}{% endif %}">
+                            <i class="fas fa-angle-left"></i>
+                        </a>
+                    {% endif %}
+                    
+                    {% for num in orders.paginator.page_range %}
+                        {% if orders.number == num %}
+                            <a class="active">{{ num }}</a>
+                        {% elif num > orders.number|add:'-3' and num < orders.number|add:'3' %}
+                            <a href="?page={{ num }}{% if status %}&status={{ status }}{% endif %}{% if restaurant_id %}&restaurant={{ restaurant_id }}{% endif %}{% if date_filter %}&date_filter={{ date_filter }}{% endif %}">
+                                {{ num }}
+                            </a>
+                        {% endif %}
+                    {% endfor %}
+                    
+                    {% if orders.has_next %}
+                        <a href="?page={{ orders.next_page_number }}{% if status %}&status={{ status }}{% endif %}{% if restaurant_id %}&restaurant={{ restaurant_id }}{% endif %}{% if date_filter %}&date_filter={{ date_filter }}{% endif %}">
+                            <i class="fas fa-angle-right"></i>
+                        </a>
+                        <a href="?page={{ orders.paginator.num_pages }}{% if status %}&status={{ status }}{% endif %}{% if restaurant_id %}&restaurant={{ restaurant_id }}{% endif %}{% if date_filter %}&date_filter={{ date_filter }}{% endif %}">
+                            <i class="fas fa-angle-double-right"></i>
+                        </a>
+                    {% endif %}
+                </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Status Update Modal -->
+    <div id="statusModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">Update Order Status</h2>
+                <span class="close-modal" onclick="closeStatusModal()">&times;</span>
+            </div>
+            <form id="updateStatusForm" method="post" action="">
+                {% csrf_token %}
+                <div class="modal-body">
+                    <p>Select the new status for order <span id="modalOrderId"></span>:</p>
+                    <select name="status" class="status-select">
+                        {% for status_value, status_name in status_choices %}
+                            <option value="{{ status_value }}">{{ status_name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="modal-btn cancel-btn" onclick="closeStatusModal()">Cancel</button>
+                    <button type="submit" class="modal-btn save-btn">Update Status</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Modal functionality
+        const modal = document.getElementById('statusModal');
+        const updateForm = document.getElementById('updateStatusForm');
+        const modalOrderId = document.getElementById('modalOrderId');
+
+        function openStatusModal(orderId) {
+            modal.style.display = 'block';
+            modalOrderId.textContent = '#' + orderId;
+            updateForm.action = `/admin_orders/${orderId}/update-status/`;
+        }
+
+        function closeStatusModal() {
+            modal.style.display = 'none';
+        }
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                closeStatusModal();
+            }
+        }
+    </script>
+</body>
+</html>
+
+
+
+
+
+
+
+

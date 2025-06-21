@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Confirm Deletion - Meal Buddy Admin</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f7fa;
+        }
+        
+        .dashboard {
+            display: flex;
+        }
+        
+        .main-content {
+            flex: 1;
+            margin-left: 250px;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 600px;
+            margin: 50px auto;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            padding: 30px;
+            text-align: center;
+        }
+        
+        .warning-icon {
+            font-size: 4rem;
+            color: #ff6b6b;
+            margin-bottom: 20px;
+        }
+        
+        h1 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+        
+        .lead {
+            color: #666;
+            margin-bottom: 20px;
+        }
+        
+        .restaurant-name {
+            font-weight: 600;
+            color: #ff7e5f;
+        }
+        
+        p {
+            color: #777;
+            margin-bottom: 30px;
+        }
+        
+        .button-group {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+        }
+        
+        .btn {
+            padding: 10px 25px;
+            border-radius: 5px;
+            font-weight: 500;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+        
+        .btn-secondary {
+            background-color: #e9ecef;
+            color: #495057;
+        }
+        
+        .btn-secondary:hover {
+            background-color: #dee2e6;
+        }
+        
+        .btn-danger {
+            background-color: #ff6b6b;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        
+        .btn-danger:hover {
+            background-color: #fa5252;
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard">
+        <!-- Include Admin Sidebar -->
+        {% include 'includes/admin_sidebar.html' %}
+        
+        <div class="main-content">
+            <div class="container">
+                <i class="fas fa-exclamation-triangle warning-icon"></i>
+                <h1>Confirm Deletion</h1>
+                <p class="lead">Are you sure you want to delete the restaurant <span class="restaurant-name">{{ restaurant.name }}</span>?</p>
+                <p>This action cannot be undone. All associated menu items and reviews will also be deleted.</p>
+                
+                <div class="button-group">
+                    <a href="{% url 'admin_restaurants' %}" class="btn btn-secondary">Cancel</a>
+                    <form method="POST" style="display: inline;">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-danger">Delete Restaurant</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

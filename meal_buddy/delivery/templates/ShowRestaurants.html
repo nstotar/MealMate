@@ -1,0 +1,26 @@
+<!-- Optimize template by using template inheritance -->
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container">
+    {% if restaurants %}
+        <div class="row">
+            {% for restaurant in restaurants %}
+                <!-- Keep only essential markup -->
+                <div class="col-md-4 mb-4">
+                    <div class="card restaurant-card">
+                        <!-- ... restaurant card content ... -->
+                        <a href="{% url 'view_menu' restaurant.id %}" class="btn btn-primary">
+                            <i class="fas fa-utensils me-2"></i>View Menu
+                        </a>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <!-- No restaurants message -->
+    {% endif %}
+</div>
+{% endblock %}
+
+

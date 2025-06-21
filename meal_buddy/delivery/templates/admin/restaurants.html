@@ -1,0 +1,77 @@
+<!-- This is the renamed admin/ShowRestaurants.html file -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Restaurants - Meal Buddy Admin</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        /* Keep all the existing styles */
+        
+    </style>
+</head>
+<body>
+    <div class="dashboard">
+        <!-- Sidebar -->
+            {% include 'admin/sidebar.html' %}
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Header -->
+            <div class="header ">
+                <div class="page-title">
+                    <h1>Manage Restaurants</h1>
+                    <p>View and manage all restaurants in the system</p>
+                </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="action-buttons ">
+                <a href="{% url 'open_add_restaurant' %}" class="action-button add-restaurant">
+                    <i class="fas fa-plus"></i>
+                    Add New Restaurant
+                </a>
+            </div>
+
+            <!-- Restaurant Grid -->
+            {% if restaurants %}
+                <div class="restaurant-grid">
+                    {% for restaurant in restaurants %}
+                        <div class="restaurant-card">
+                            <img src="{{ restaurant.image_url }}" alt="{{ restaurant.name }}" class="restaurant-image">
+                            <div class="restaurant-info">
+                                <h2 class="restaurant-name">{{ restaurant.name }}</h2>
+                                <div class="restaurant-details">
+                                    <p><strong>Cuisine:</strong> {{ restaurant.cuisine }}</p>
+                                    <p><strong>Phone:</strong> {{ restaurant.phone }}</p>
+                                    <p><strong>Hours:</strong> {{ restaurant.opening_hours }}</p>
+                                    <div class="rating">
+                                        {% for i in ""|ljust:restaurant.rating %}⭐{% endfor %}
+                                    </div>
+                                </div>
+                                <div class="card-actions">
+                                    <a href="{% url 'update_restaurant' restaurant.id %}" class="card-action edit-action">
+                                        <i class="fas fa-edit"></i> Edit
+                                    </a>
+                                    <a href="{% url 'delete_restaurant' restaurant.id %}" class="card-action delete-action">
+                                        <i class="fas fa-trash"></i> Delete
+                                    </a>
+                                    <a href="{% url 'manage_menu' restaurant.id %}" class="card-action menu-action">
+                                        <i class="fas fa-utensils"></i> Menu
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div class="no-restaurants">
+                    <p>No restaurants available yet. Click "Add New Restaurant" to get started.</p>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+</body>
+</html>
