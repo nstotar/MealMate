@@ -27,4 +27,16 @@ local_settings.py
 # Environment variables
 .env
 
+# Virtual environments
 myenv/
+venv/
+env/
+
+# Fixture files that might cause issues
+*.json
+fixtures/
+initial_data.*
+
+# Binary files
+*.bin
+*.dat

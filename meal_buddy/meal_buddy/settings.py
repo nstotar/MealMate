@@ -17,6 +17,10 @@ DEBUG = os.environ.get('DEBUG', 'False') == 'True'
 # Allow multiple comma-separated hosts: localhost,127.0.0.1,Meal_Buddy.onrender.com
 ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', '127.0.0.1,localhost').split(',')
 
+# Default local development hosts
+if not os.environ.get('ALLOWED_HOSTS'):
+    ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
+
 # Add Render external host if available
 render_url = os.environ.get('RENDER_EXTERNAL_URL')
 if render_url:
@@ -76,6 +80,9 @@ if os.getenv('DATABASE_URL'):
         'default': dj_database_url.config(
             conn_max_age=600,
             ssl_require=True,
+            options={
+                'charset': 'utf8mb4',
+            }
         )
     }
 else:
@@ -83,6 +90,9 @@ else:
         'default': {
             'ENGINE': 'django.db.backends.sqlite3',
             'NAME': BASE_DIR / 'db.sqlite3',
+            'OPTIONS': {
+                'charset': 'utf8',
+            }
         }
     }
 
@@ -111,6 +121,15 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # --- Razorpay Integration ---
 RAZORPAY_KEY_ID = os.environ.get('RAZORPAY_KEY_ID', '')
 RAZORPAY_KEY_SECRET = os.environ.get('RAZORPAY_KEY_SECRET', '')
+
+# --- Fixture Settings ---
+# Disable automatic fixture loading to prevent Unicode errors
+FIXTURE_DIRS = []
+
+# --- Deployment Settings ---
+# Ensure proper encoding for deployment
+DEFAULT_CHARSET = 'utf-8'
+FILE_CHARSET = 'utf-8'
 
 # --- Optional: Logging (optional for debugging in prod) ---
 if not DEBUG:
